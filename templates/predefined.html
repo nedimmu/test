@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Category</title>
+</head>
+<body>
+    <h1>Create Category</h1>
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <p>
+            <label for="name">Name</label><br>
+            <input type="text" name="name" id="id" size="20" required>
+        </p>
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </form>
+
+    <a href="{{ url_for('cardsorting') }}">Back to Home</a>
+</body>
+
+<div class="add-note-container">
+    <form class="form-container" id="create-category" method="POST" action="{{ url_for('create_category') }}">
+      <div class="form-group">
+        <input name="title" class="card-sorting" id="title" placeholder="Deine Ideen..">
+        <input name="description" class="card-sorting" id="description" placeholder="Deine Beschreibung Ideen..">
+
+      </div>
+      <div class="form-group">
+        <input type="hidden" name="project_id" id="note-project" value="{{ selectedProjectId }}">
+      </div>
+      <button type="submit" class="add-note">
+        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 448 512">
+          <!-- SVG icon code here -->
+        </svg>
+      </button>
+    </form>
+    
+  </div>
+</html>

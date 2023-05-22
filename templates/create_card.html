@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Card</title>
+</head>
+<body>
+    <h1>Create Card</h1>
+    <form method="POST" action="{{ url_for('create_card', cardsorting_id=cardsorting.id) }}">
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required><br><br>
+        <label for="description">Description:</label>
+        <textarea name="description" id="description"></textarea><br><br>
+        <input type="submit" value="Create Card">
+    </form>
+</body>
+</html>

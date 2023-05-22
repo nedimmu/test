@@ -1,0 +1,113 @@
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Profile</title>
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='main.css') }}">
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+      <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    </head>
+    <body class="profile-body">
+  
+      <div class="app-header">
+        <div class="first-style">
+        <img src="static\img\dc_logo_green.png" class="logo">
+        <select class="form-control" id="project-select">
+          {% for project in projects %}
+          <option class="option-design" value="{{ project.id }}" {% if project.id == current_project_id %}selected{% endif %}>{{ project.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+        <p ><a class="head-nav-link" href="{{ url_for('logout') }}">Logout</a></p>
+      
+      </div>
+      
+         
+    
+      
+  <div class="main-content">
+    <div class="nav">
+      <div class="Navlinks">
+        <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" href="{{ url_for('dashboard') }}"> <div class="icon-box"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 640 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 32h32V0H224 192 64 32 0V32H32V352c0 53 43 96 96 96c11.2 0 22-1.9 32-5.5V432 418.4l7.1-11.6 5.5-9C161.1 409.1 145.4 416 128 416c-35.3 0-64-28.7-64-64V192H192V352c0 6.7-1 13.1-2.9 19.1L224 314.4V32zM64 32H192V160H64V32zM304 0H288V32h16 16V219.5L194.4 423.6l-2.4 3.9V432v64 16h16H624h16V496 432v-4.5l-2.4-3.9L512 219.5V32h16 16V0H528 304zM480 32V224v4.5l2.4 3.9L536.3 320H295.7l53.9-87.6 2.4-3.9V224 32H480zM224 436.5L276 352H556l52 84.5V480H224V436.5z"/></svg></div>Dashboard</a>
+    <a class="nav-link {% if request.path == url_for('backlog') %}active{% endif %}" href="{{ url_for('backlog') }}"> <div class="icon-box"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 640 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 32h32V0H224 192 64 32 0V32H32V352c0 53 43 96 96 96c11.2 0 22-1.9 32-5.5V432 418.4l7.1-11.6 5.5-9C161.1 409.1 145.4 416 128 416c-35.3 0-64-28.7-64-64V192H192V352c0 6.7-1 13.1-2.9 19.1L224 314.4V32zM64 32H192V160H64V32zM304 0H288V32h16 16V219.5L194.4 423.6l-2.4 3.9V432v64 16h16H624h16V496 432v-4.5l-2.4-3.9L512 219.5V32h16 16V0H528 304zM480 32V224v4.5l2.4 3.9L536.3 320H295.7l53.9-87.6 2.4-3.9V224 32H480zM224 436.5L276 352H556l52 84.5V480H224V436.5z"/></svg></div>Test Backlog</a>
+    <a class="nav-link {% if request.path == url_for('priorisation') %}active{% endif %}" href="{{ url_for('priorisation') }}"> <div class="icon-box"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentcolor" d="M64 64C46.3 64 32 78.3 32 96V416c0 17.7 14.3 32 32 32H384c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32H64zM0 96C0 60.7 28.7 32 64 32H384c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm104 64a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm88 0c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H208c-8.8 0-16-7.2-16-16zm0 96c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H208c-8.8 0-16-7.2-16-16zm0 96c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H208c-8.8 0-16-7.2-16-16zm-64-72a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm-24 72a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/></svg></div>Priorisierung</a>
+    <a class="nav-link {% if request.path == url_for('profile') %}active{% endif %}" href="{{ url_for('profile') }}">    <div class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 384 512" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="currentcolor" d="M310.3 258.1C326.5 234.8 336 206.6 336 176c0-79.5-64.5-144-144-144S48 96.5 48 176c0 30.6 9.5 58.8 25.7 82.1c4.1 5.9 8.8 12.3 13.6 19l0 0c12.7 17.5 27.1 37.2 38 57.1c8.9 16.2 13.7 33.3 16.2 49.9H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H242.5c2.5-16.6 7.3-33.7 16.2-49.9c10.9-20 25.3-39.7 38-57.1c4.9-6.7 9.5-13 13.6-19zM192 96c-44.2 0-80 35.8-80 80c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16zM146.7 448c6.6 18.6 24.4 32 45.3 32s38.7-13.4 45.3-32H146.7zM112 432v-5.3c0-5.9 4.8-10.7 10.7-10.7H261.3c5.9 0 10.7 4.8 10.7 10.7V432c0 44.2-35.8 80-80 80s-80-35.8-80-80z"/></svg>
+    </div>Brainstorming</a>
+    <p class="seperator-nav">TOOLS</p>
+    <a class="nav-link {% if request.path == url_for('profile') %}active{% endif %}" href="{{ url_for('profile') }}">Cardsorting</a>
+    <a class="nav-link {% if request.path == url_for('profile') %}active{% endif %}" href="{{ url_for('profile') }}">Heristische Analyse</a>
+  </div>
+</div>
+  
+
+ 
+  
+
+      <script>
+
+// Get the project select element
+const projectSelect = document.querySelector("#project-select");
+
+// Get the selected project ID from localStorage, or use the default value "1"
+const selectedProjectId = localStorage.getItem('selectedProjectId') || "{{ current_project_id }}";
+// Set the selected project on the select element
+projectSelect.value = selectedProjectId;
+
+// Add an event listener to the select element to update the selected project ID in localStorage
+projectSelect.addEventListener("change", (event) => {
+  const projectId = event.target.value;
+  localStorage.setItem("selectedProjectId", projectId);
+  fetch(`/set_project/${projectId}`);
+  location.reload(); // Refresh the page
+});
+
+// Save state to localStorage when user leaves the page
+window.addEventListener('beforeunload', function(event) {
+  localStorage.setItem('myState', JSON.stringify(state));
+});
+
+// Retrieve state from localStorage when user comes back to the page
+var state = JSON.parse(localStorage.getItem('myState'));
+
+$(function() {
+  $("#notes").sortable({
+    update: function() {
+      let note_order = [];
+      $("#notes li").each(function() {
+        note_order.push($(this).data("note-id"));
+      });
+
+      $.post("{{ url_for('update_notes_order') }}", {
+        note_order: note_order
+      }).done(function() {
+        console.log("Order saved");
+      }).fail(function() {
+        alert("Failed to save order");
+      });
+    }
+  });
+});
+
+const dropdown = document.getElementById("project-select");
+  dropdown.addEventListener("change", function() {
+    const projectId = dropdown.value;
+    window.location.href = "/dashboard?id=" + projectId;
+  });
+
+
+      </script>
+    
+    </div>
+  
+    
+
+  </div>
+  
+  <i class="fas fa-cloud"></i>
+  <i class="fas fa-cloud" style="font-size:24px;"></i>
+
+  </body>
+
+  </html>

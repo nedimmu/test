@@ -1,0 +1,16 @@
+<form class="form-container" id="add-cardsorting" method="POST" action="{{ url_for('add_cardsorting') }}">
+  <div class="form-group">
+    <input name="title-sorting" class="card-sorting" id="title-sorting" placeholder="Deine Ideen..">
+    <input name="description" class="card-sorting" id="description" placeholder="Deine Beschreibung Ideen..">
+    <button type="button" onclick="submitCardsortings()">Submit Cardsortings</button>
+  </div>
+
+  <div class="form-group">
+    <input type="hidden" name="project_id" id="note-project" value="{{ selectedProjectId }}">
+  </div>
+  <button type="submit" class="add-note">
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 448 512">
+      <!-- SVG icon code here -->
+    </svg>
+  </button>
+</form>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Project</title>
+</head>
+<body>
+    <h1>Add Project</h1>
+    <form method="POST" action="{{ url_for('add_project') }}">
+        <div>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div>
+            <input type="submit" value="Add Project">
+        </div>
+    </form>
+</body>
+</html>

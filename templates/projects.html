@@ -1,0 +1,13 @@
+<h1>Projects</h1>
+<ul>
+  <h2>My Projects:</h2>
+  {% for project in projects %}
+    <li><a href="{{ url_for('profile', project_id=project.id) }}">{{ project.title }}</a></li>
+  {% endfor %}
+</ul>
+<ul>
+  <h2>Projects I'm Added To:</h2>
+  {% for project in member_projects %}
+    <li><a href="{{ url_for('profile', project_id=project.id) }}">{{ project.title }}</a></li>
+  {% endfor %}
+</ul>

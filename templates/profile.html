@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='main.css') }}">
+    <div class="app-header">
+      <div class="first-style">
+        <select class="form-control" id="project-select" onchange="changeProject(this)">
+          {% for project in member_projects %}
+            <option value="{{ project.id }}" {% if project.id == project_id %}selected{% endif %}>{{ project.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+    </div>
+</head>
+<body>
+    <h1>Welcome, {{ current_user.username }}!</h1>
+    {% if project %}
+    <h2>Current Project: {{ project.title }}</h2>
+    <p>Project ID: {{ project.id }}</p>
+
+    <h3>Project Members:</h3>
+    <ul id="project_members_list">
+      {% for member in members %}
+      <li {% if member.member.id == current_user.id or member.member.id in active_users %}class="active-member"{% endif %} id="{{ member.member.id }}">
+          {{ member.member.username }}
+          {% if current_user.id == project.user_id and member.member.id != current_user.id %}
+          <form method="POST" action="{{ url_for('profile', project_id=project.id) }}">
+              <input type="hidden" name="delete_member_id" value="{{ member.member.id }}">
+              <button type="submit">Delete</button>
+          </form>
+          {% endif %}
+      </li>
+      {% endfor %}
+  </ul>
+
+    <hr>
+    <h3>Add Member:</h3>
+    <form method="POST" action="{{ url_for('add_signup') }}">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="hidden" name="project_id" value="{{ project.id }}">
+        <input type="submit" value="Invite">
+    </form>
+
+    <hr>
+    <h3>Notes:</h3>
+    <ul id="note_list">
+        {% for note in notes %}
+        <li data-note-id="{{ note.id }}">{{ note.content }}
+            <button onclick="deleteExistingNote('{{ note.id }}')">Delete</button>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+    <form onsubmit="event.preventDefault(); addNote();">
+        <input type="hidden" id="project_id" value="{{ project.id }}">
+        <!-- Store the project ID in a hidden input field -->
+        <textarea id="note_content" placeholder="Note content" required></textarea>
+        <input type="submit" value="Add Note">
+    </form>
+    {% else %}
+    <p>No project selected.</p>
+    {% endif %}
+
+    
+    <script>
+
+
+
+    var socket = io.connect('http://127.0.0.1:5000');
+var project_id = "{{ project.id }}";
+var currentUserID = "{{ current_user.id }}";
+var activeUsers = [];
+
+socket.on('connect', function() {
+    console.log('WebSocket connected');
+    socket.emit('join_room', { project_id: project_id });
+});
+
+socket.on('disconnect', function() {
+    console.log('WebSocket disconnected');
+});
+
+// Emit the leave_room event when the window is about to unload (i.e., when the user is leaving the page)
+window.addEventListener('beforeunload', function() {
+    socket.emit('leave_room', { project_id: project_id });
+});
+
+socket.on('new_note', function(data) {
+    // Handle receiving a new note
+    var noteList = document.getElementById('note_list');
+    var newNote = document.createElement('li');
+    newNote.textContent = data.content;
+
+    // Save the note id to the note element for later use
+    newNote.dataset.noteId = data.id;
+
+    // Create delete button
+    var deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.onclick = function() {
+        deleteNote(newNote);
+    };
+
+    // Append the delete button to the new note
+    newNote.appendChild(deleteButton);
+
+    noteList.appendChild(newNote);
+});
+
+function addNote() {
+    var content = document.getElementById('note_content').value;
+    socket.emit('add_note', { data: content, project_id: project_id });
+
+    // Clear the note_content field after submission
+    document.getElementById('note_content').value = '';
+}
+
+function deleteExistingNote(noteId) {
+    var noteElement = document.querySelector(`li[data-note-id='${noteId}']`);
+    deleteNote(noteElement);
+}
+
+function deleteNote(noteElement) {
+    var noteId = noteElement.dataset.noteId;
+    socket.emit('delete_note', { note_id: noteId, project_id: project_id });
+
+    // Remove the note element from the DOM
+    noteElement.remove();
+}
+
+socket.on('note_deleted', function(data) {
+    var noteList = document.getElementById('note_list');
+    var noteToRemove = document.querySelector(`li[data-note-id='${data.note_id}']`);
+    if (noteToRemove) {
+        noteList.removeChild(noteToRemove);
+    }
+});
+
+socket.on('user_connected', function(data) {
+    // Handle a new user connection
+    var projectMembersList = document.getElementById('project_members_list');
+    var newUser = document.getElementById(data.user_id);
+    if (newUser) {
+        newUser.classList.add('active-member');
+        newUser.style.color = 'blue';
+        activeUsers.push(data.user_id);
+    }
+});
+
+socket.on('user_disconnected', function(data) {
+    // Handle a user disconnection
+    var connectedUsersList = document.getElementById('connected_users_list');
+    var userToRemove = document.querySelector(`li:contains('${data.user_id}')`);
+    if (userToRemove) {
+        connectedUsersList.removeChild(userToRemove);
+        var index = activeUsers.indexOf(data.user_id);
+        if (index > -1) {
+            activeUsers.splice(index, 1);
+        }
+    }
+});
+
+// Mark the current user as active on page load
+window.addEventListener('DOMContentLoaded', function() {
+    var connectedUsersList = document.getElementById('connected_users_list');
+    var currentUser = document.querySelector(`li:contains('${currentUserID}')`);
+    if (currentUser) {
+        currentUser.classList.add('active-member');
+        currentUser.style.color = 'blue';
+        activeUsers.push(currentUserID);
+    }
+
+    // Apply the "active-member" class and color to the project members who are active
+    var projectMembersList = document.getElementById('project_members_list');
+    var projectMembers = projectMembersList.getElementsByTagName('li');
+    for (var i = 0; i < projectMembers.length; i++) {
+        var memberId = projectMembers[i].getAttribute('id');
+        if (activeUsers.includes(memberId)) {
+            projectMembers[i].classList.add('active-member');
+            projectMembers[i].style.color = 'blue';
+        }
+    }
+});
+
+// Retrieve active users from the hidden input field
+var activeUsersJson = document.getElementById('active_users_json').value;
+var activeUsersData = JSON.parse(activeUsersJson);
+activeUsers = activeUsersData.map(function(user) {
+    return user.id;
+});
+console.log(activeUsers);
+
+function changeProject(selectElement) {
+    var selectedProjectId = selectElement.value;
+    var newUrl = "{{ url_for('profile', project_id=0) }}".replace('0', selectedProjectId);
+    window.location.href = newUrl;
+  }
+    </script>
+
+    <style>
+        .active-member {
+            color: blue;
+        }
+    </style>
+</body>
+</html>

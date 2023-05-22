@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Category</title>
+</head>
+<body>
+    <h1>Create Category</h1>
+    <form method="POST" action="{{ url_for('create_category', cardsorting_id=cardsorting.id) }}">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" required><br><br>
+        <input type="submit" value="Create Category">
+    </form>
+</body>
+</html>

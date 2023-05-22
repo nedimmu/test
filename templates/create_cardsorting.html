@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Card Sorting</title>
+</head>
+<body>
+    <h1>Create Card Sorting</h1>
+    <form method="POST" action="{{ url_for('create_cardsorting') }}">
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required><br><br>
+        <label for="description">Description:</label>
+        <textarea name="description" id="description"></textarea><br><br>
+        <input type="submit" value="Create Card Sorting">
+    </form>
+</body>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input List Example</title>
+    <style>
+        #item-input {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Input List Example</h1>
+    <input type="text" id="item-input" placeholder="Enter an item">
+    <button id="submit-btn">Submit</button>
+    <ul id="item-list"></ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var input = document.getElementById("item-input");
+            var submitBtn = document.getElementById("submit-btn");
+            var itemList = document.getElementById("item-list");
+
+            submitBtn.addEventListener("click", function(event) {
+                event.preventDefault();
+                var item = input.value;
+                if (item !== "") {
+                    var listItem = document.createElement("li");
+                    listItem.textContent = item;
+                    itemList.appendChild(listItem);
+                    input.value = "";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Card Sorting Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        .category {
+            border: 1px solid #ccc;
+            min-height: 200px;
+            position: relative;
+            background-color: #f2f2f2;
+        }
+        .category h2 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            border: 1px solid #ccc;
+            min-height: 100px;
+            background-color: #fff;
+            margin-top: 10px;
+            height: auto;
+            padding:0px;
+            padding-bottom:40px;
+        }
+        .card {
+            border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+    margin-bottom: 5px;
+    width: 90%;
+    list-style: none;
+    cursor: move;
+        }
+        .cards-container.drop-target {
+            border: 2px solid blue;
+        }
+        .invisible-card {
+            visibility: hidden;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Card Sorting Application</h1>
+    <div class="categories">
+        {% for category in categories %}
+            {% if category.id > 1 %}
+                <div class="category" id="{{ category.id }}">
+                    <h2>{{ category.name }}</h2>
+                    <ul class="cards-container" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+                        <div class="card invisible-card"></div> <!-- Invisible card -->
+                        {% for card in category.cards %}
+                            <li class="card" id="{{ card.id }}" draggable="true" ondragstart="drag(event)" ondragend="dragEnd(event)" data-category="{{ category.id }}">
+                                {{ card.title }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="cards-container" ondrop="drop(event)" ondragover="allowDrop(event)">
+        {% for card in cards if not card.category_id %}
+        <div class="card" id="{{ card.id }}" draggable="true" ondragstart="drag(event)" ondragend="dragEnd(event)" data-category="{{ card.category_id if card.category_id else 'null' }}">
+            {{ card.title }}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="categories">
+        {% for category in categories %}
+            {% if category.id == 1 %}
+                <div class="category" id="{{ category.id }}">
+                    <h2>{{ category.name }}</h2>
+                    <ul class="cards-container" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <div class="card invisible-card"></div> <!-- Invisible card -->
+                        {% for card in category.cards %}
+                            <li class="card" id="{{ card.id }}" draggable="true" ondragstart="drag(event)" ondragend="dragEnd(event)" data-category="{{ category.id }}">
+                                {{ card.title }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <a href="{{ url_for('create_category') }}?dropped=true">Create new Category</a><br>
+    <a href="{{ url_for('create_card') }}?dropped=true">Create new Card</a>
+
+    <script>
+      // Function to handle drag start event
+      function drag(event) {
+            event.stopPropagation(); // Prevent event bubbling to the container
+            event.dataTransfer.setData("text/plain", event.target.id);
+            event.dataTransfer.effectAllowed = "move";
+}
+
+function drop(event) {
+    event.stopPropagation(); // Stop event propagation at the start
+    event.preventDefault();
+
+    // Check if the event target is a cards-container
+    var newContainer = event.target.closest(".cards-container");
+    if (!newContainer || event.target.classList.contains("card")) {
+        console.log("Drop target was not a cards-container or was a card.");
+        return;
+    }
+
+    var cardId = event.dataTransfer.getData("text/plain");
+    var card = document.getElementById(cardId);
+    var originalCategory = card.dataset.category;
+    var newCategory = newContainer.closest(".category").id;
+
+    console.log("Drop event:", event);
+    console.log("Card ID:", cardId);
+    console.log("Original category:", originalCategory);
+    console.log("New category:", newCategory);
+
+    if (originalCategory !== newCategory) {
+        newContainer.appendChild(card);
+
+        // Update the card's category ID
+        card.dataset.category = newCategory;
+
+        // Save the updated card data in the database using an AJAX request
+        var formData = new FormData();
+        formData.append("cardId", cardId);
+        formData.append("categoryId", newCategory);
+
+        fetch("/update_card_category", {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                if (response.ok) {
+                    console.log("Card category updated successfully");
+                    // Reload the page after the card data is saved in the database
+                    window.location.reload();
+                } else {
+                    console.log("Error updating card category");
+                }
+            })
+            .catch((error) => {
+                console.error("Error updating card category:", error);
+            });
+    } else {
+        // Return the card to its original position within the container
+        card.style.top = "0";
+        card.style.left = "0";
+    }
+
+    // Mark the card as having been dropped
+    card.classList.add("dropped");
+}
+
+   // Function to allow dropping on the cards-container
+   function allowDrop(event) {
+        event.preventDefault();
+        var cardsContainer = event.target.closest(".cards-container");
+        cardsContainer.classList.add("drop-target");
+
+    }
+    
+    // Function to handle drag leave event
+function dragLeave(event) {
+    event.preventDefault();
+    var cardsContainer = event.target.closest(".cards-container");
+    cardsContainer.classList.remove("drop-target");
+}
+
+    // Function to handle drag end event
+    function dragEnd(event) {
+        event.preventDefault();
+        // Additional logic for drag end if needed
+    }
+
+
+    // Function to handle drag over event
+function dragOver(event) {
+    event.preventDefault();
+    var cardsContainer = event.target.closest(".cards-container");
+    cardsContainer.classList.add("drop-target");
+}
+
+
+   
+</script>

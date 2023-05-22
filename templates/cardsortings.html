@@ -1,0 +1,137 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profile</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,0" />
+  </head>
+  <body class="profile-body">
+
+    <div class="app-header">
+      <div class="first-style">
+        <select class="form-control" id="project-select">
+          {% for project in projects %}
+          <option class="option-design" value="{{ project.id }}" {% if project.id == current_project_id %}selected{% endif %}>{{ project.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+        <p ><a class="head-nav-link" href="{{ url_for('logout') }}">Logout</a></p>
+      
+    
+    </div>
+
+<div class="main-content">
+  <div class="sidebar">
+    <div class="first-style">
+      <img src="static\img\dc_logo_green.png" class="logo">
+      <select class="form-control" id="project-select">
+        {% for project in projects %}
+        <option class="option-design" value="{{ project.id }}" {% if project.id == current_project_id %}selected{% endif %}>{{ project.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <div class="nav">
+      <div class="Navlinks">
+        <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" href="{{ url_for('dashboard') }}"> <div class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M88 64c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H40c-4.4 0-8-3.6-8-8V72c0-4.4 3.6-8 8-8H88zM40 32C17.9 32 0 49.9 0 72v48c0 22.1 17.9 40 40 40H88c22.1 0 40-17.9 40-40V72c0-22.1-17.9-40-40-40H40zM88 224c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H40c-4.4 0-8-3.6-8-8V232c0-4.4 3.6-8 8-8H88zM40 192c-22.1 0-40 17.9-40 40v48c0 22.1 17.9 40 40 40H88c22.1 0 40-17.9 40-40V232c0-22.1-17.9-40-40-40H40zm0 192H88c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H40c-4.4 0-8-3.6-8-8V392c0-4.4 3.6-8 8-8zM0 392v48c0 22.1 17.9 40 40 40H88c22.1 0 40-17.9 40-40V392c0-22.1-17.9-40-40-40H40c-22.1 0-40 17.9-40 40zM248 64c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H200c-4.4 0-8-3.6-8-8V72c0-4.4 3.6-8 8-8h48zM200 32c-22.1 0-40 17.9-40 40v48c0 22.1 17.9 40 40 40h48c22.1 0 40-17.9 40-40V72c0-22.1-17.9-40-40-40H200zm0 192h48c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H200c-4.4 0-8-3.6-8-8V232c0-4.4 3.6-8 8-8zm-40 8v48c0 22.1 17.9 40 40 40h48c22.1 0 40-17.9 40-40V232c0-22.1-17.9-40-40-40H200c-22.1 0-40 17.9-40 40zm88 152c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H200c-4.4 0-8-3.6-8-8V392c0-4.4 3.6-8 8-8h48zm-48-32c-22.1 0-40 17.9-40 40v48c0 22.1 17.9 40 40 40h48c22.1 0 40-17.9 40-40V392c0-22.1-17.9-40-40-40H200zM360 64h48c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8V72c0-4.4 3.6-8 8-8zm-40 8v48c0 22.1 17.9 40 40 40h48c22.1 0 40-17.9 40-40V72c0-22.1-17.9-40-40-40H360c-22.1 0-40 17.9-40 40zm88 152c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8V232c0-4.4 3.6-8 8-8h48zm-48-32c-22.1 0-40 17.9-40 40v48c0 22.1 17.9 40 40 40h48c22.1 0 40-17.9 40-40V232c0-22.1-17.9-40-40-40H360zm0 192h48c4.4 0 8 3.6 8 8v48c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8V392c0-4.4 3.6-8 8-8zm-40 8v48c0 22.1 17.9 40 40 40h48c22.1 0 40-17.9 40-40V392c0-22.1-17.9-40-40-40H360c-22.1 0-40 17.9-40 40z"/></svg> </div><p class="nav-text">Dashboard</p></a>
+        <a class="nav-link {% if request.path == url_for('backlog') %}active{% endif %}" href="{{ url_for('backlog') }}"> <div class="icon-box"> <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M292.7 4.7c6.2-6.2 16.4-6.2 22.6 0l32 32 128 128 32 32c6.2 6.2 6.2 16.4 0 22.6s-16.4 6.2-22.6 0L464 198.6l-84.7 84.7L181.8 480.8c-20 20-47.1 31.2-75.3 31.2C47.7 512 0 464.3 0 405.5c0-28.2 11.2-55.3 31.2-75.3l69.5-69.5L313.4 48 292.7 27.3c-6.2-6.2-6.2-16.4 0-22.6zM336 70.6L150.6 256H361.4l80-80L336 70.6zM329.4 288H118.6L53.8 352.8c-14 14-21.8 32.9-21.8 52.7c0 41.1 33.4 74.5 74.5 74.5c19.8 0 38.7-7.8 52.7-21.8L329.4 288z"/></svg></div><p class="nav-text">Backlog</p></a>
+        <a class="nav-link {% if request.path == url_for('priorisation') %}active{% endif %}" href="{{ url_for('priorisation') }}"> <div class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 64C46.3 64 32 78.3 32 96V416c0 17.7 14.3 32 32 32H512c17.7 0 32-14.3 32-32V96c0-17.7-14.3-32-32-32H64zM0 96C0 60.7 28.7 32 64 32H512c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zm104 64a24 24 0 1 1 48 0 24 24 0 1 1 -48 0zm88 0c0-8.8 7.2-16 16-16H464c8.8 0 16 7.2 16 16s-7.2 16-16 16H208c-8.8 0-16-7.2-16-16zm0 96c0-8.8 7.2-16 16-16H464c8.8 0 16 7.2 16 16s-7.2 16-16 16H208c-8.8 0-16-7.2-16-16zm0 96c0-8.8 7.2-16 16-16H464c8.8 0 16 7.2 16 16s-7.2 16-16 16H208c-8.8 0-16-7.2-16-16zm-64-72a24 24 0 1 1 0-48 24 24 0 1 1 0 48zm-24 72a24 24 0 1 1 48 0 24 24 0 1 1 -48 0z"/></svg></div> <p class="nav-text">Priorisierung</p></a>
+        <a class="nav-link {% if request.path == url_for('profile') %}active{% endif %}" href="{{ url_for('profile') }}">   <div class="icon-box"> <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 384 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M310.3 258.1C326.5 234.8 336 206.6 336 176c0-79.5-64.5-144-144-144S48 96.5 48 176c0 30.6 9.5 58.8 25.7 82.1c4.1 5.9 8.8 12.3 13.6 19l0 0c12.7 17.5 27.1 37.2 38 57.1c8.9 16.2 13.7 33.3 16.2 49.9H109c-2.2-12-5.9-23.7-11.8-34.5c-9.9-18-22.2-34.9-34.5-51.8l0 0 0 0 0 0c-5.2-7.1-10.4-14.2-15.4-21.4C27.6 247.9 16 213.3 16 176C16 78.8 94.8 0 192 0s176 78.8 176 176c0 37.3-11.6 71.9-31.4 100.3c-5 7.2-10.2 14.3-15.4 21.4l0 0 0 0c-12.3 16.8-24.6 33.7-34.5 51.8c-5.9 10.8-9.6 22.5-11.8 34.5H242.5c2.5-16.6 7.3-33.7 16.2-49.9c10.9-20 25.3-39.7 38-57.1c4.9-6.7 9.5-13 13.6-19zM192 96c-44.2 0-80 35.8-80 80c0 8.8-7.2 16-16 16s-16-7.2-16-16c0-61.9 50.1-112 112-112c8.8 0 16 7.2 16 16s-7.2 16-16 16zM146.7 448c6.6 18.6 24.4 32 45.3 32s38.7-13.4 45.3-32H146.7zM112 432v-5.3c0-5.9 4.8-10.7 10.7-10.7H261.3c5.9 0 10.7 4.8 10.7 10.7V432c0 44.2-35.8 80-80 80s-80-35.8-80-80z"/> </svg> </div><p class="nav-text">Brainstorming</p></a>
+        <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" href="{{ url_for('plus_cardsorting') }}">   <div class="icon-box"> <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M416 80.4V182.1c-14.5 10.6-37.9 20.6-68.9 28.3C312.5 218.9 270 224 224 224s-88.5-5.1-123.1-13.6c-31-7.6-54.4-17.7-68.9-28.3V80.4c.3-.8 1.6-3.2 6.2-7.1c7.3-6.2 19.9-13.2 38.1-19.7C112.6 40.6 164.8 32 224 32s111.4 8.6 147.6 21.6c18.3 6.5 30.8 13.5 38.1 19.7c4.7 4 6 6.4 6.2 7.1zm0 139.1v90.6c-14.5 10.6-37.9 20.6-68.9 28.3C312.5 346.9 270 352 224 352s-88.5-5.1-123.1-13.6c-31-7.6-54.4-17.7-68.9-28.3V219.5c17.2 8.9 38.1 16.3 61.2 21.9C130.7 250.7 175.8 256 224 256s93.3-5.3 130.8-14.5c23.1-5.7 44-13 61.2-21.9zM32 431.6v-84c17.2 8.9 38.1 16.3 61.2 21.9C130.7 378.7 175.8 384 224 384s93.3-5.3 130.8-14.5c23.1-5.7 44-13 61.2-21.9v84c-.3 .8-1.6 3.2-6.2 7.1c-7.3 6.2-19.9 13.2-38.1 19.7C335.4 471.4 283.2 480 224 480s-111.4-8.6-147.6-21.6c-18.3-6.5-30.8-13.5-38.1-19.7c-4.7-4-6-6.4-6.2-7.1zm384.1-.3a.1 .1 0 1 0 -.2 0 .1 .1 0 1 0 .2 0zm-384.2 0a.1 .1 0 1 0 .1 0 .1 .1 0 1 0 -.1 0zm0-350.6a.1 .1 0 1 0 .1-.1 .1 .1 0 1 0 -.1 .1zM416 80.6a.1 .1 0 1 0 -.1 .3 .1 .1 0 1 0 .1-.3zM448 432V80C448 35.8 347.7 0 224 0S0 35.8 0 80V432c0 44.2 100.3 80 224 80s224-35.8 224-80z"/></svg> </div><p class="nav-text">Database</p></a>
+        <a class="nav-link {% if request.path == url_for('cardsortings') %}active{% endif %}" href="{{ url_for('cardsortings') }}">   <div class="icon-box"> <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M416 80.4V182.1c-14.5 10.6-37.9 20.6-68.9 28.3C312.5 218.9 270 224 224 224s-88.5-5.1-123.1-13.6c-31-7.6-54.4-17.7-68.9-28.3V80.4c.3-.8 1.6-3.2 6.2-7.1c7.3-6.2 19.9-13.2 38.1-19.7C112.6 40.6 164.8 32 224 32s111.4 8.6 147.6 21.6c18.3 6.5 30.8 13.5 38.1 19.7c4.7 4 6 6.4 6.2 7.1zm0 139.1v90.6c-14.5 10.6-37.9 20.6-68.9 28.3C312.5 346.9 270 352 224 352s-88.5-5.1-123.1-13.6c-31-7.6-54.4-17.7-68.9-28.3V219.5c17.2 8.9 38.1 16.3 61.2 21.9C130.7 250.7 175.8 256 224 256s93.3-5.3 130.8-14.5c23.1-5.7 44-13 61.2-21.9zM32 431.6v-84c17.2 8.9 38.1 16.3 61.2 21.9C130.7 378.7 175.8 384 224 384s93.3-5.3 130.8-14.5c23.1-5.7 44-13 61.2-21.9v84c-.3 .8-1.6 3.2-6.2 7.1c-7.3 6.2-19.9 13.2-38.1 19.7C335.4 471.4 283.2 480 224 480s-111.4-8.6-147.6-21.6c-18.3-6.5-30.8-13.5-38.1-19.7c-4.7-4-6-6.4-6.2-7.1zm384.1-.3a.1 .1 0 1 0 -.2 0 .1 .1 0 1 0 .2 0zm-384.2 0a.1 .1 0 1 0 .1 0 .1 .1 0 1 0 -.1 0zm0-350.6a.1 .1 0 1 0 .1-.1 .1 .1 0 1 0 -.1 .1zM416 80.6a.1 .1 0 1 0 -.1 .3 .1 .1 0 1 0 .1-.3zM448 432V80C448 35.8 347.7 0 224 0S0 35.8 0 80V432c0 44.2 100.3 80 224 80s224-35.8 224-80z"/></svg> </div><p class="nav-text">Cardsorting</p></a>
+
+      </div>
+    </div>
+    <button id="sidebarToggle">Toggle Sidebar</button>
+  </div>
+
+  <div class="side-content">
+   
+
+    
+    
+<div class="side-area">
+   <!-- Add note form -->
+   
+
+   <p ><a class="head-nav-link" href="{{ url_for('new_cardsorting') }}">New Cardsorting</a></p>
+ 
+  
+</div>
+
+<!-- Add the necessary scripts -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script>
+ 
+  const sidebar = document.querySelector('.sidebar');
+const iconbox = document.querySelector('.icon-box');
+const sidebarToggle = document.getElementById('sidebarToggle');
+
+sidebarToggle.addEventListener('click', () => {
+  if (sidebar.style.width === '60px') {
+    sidebar.style.width = '300px';
+  } else {
+    sidebar.style.width = '60px';
+  }
+});
+
+// Get the project select element
+const projectSelect = document.querySelector("#project-select");
+
+// Get the selected project ID from localStorage, or use the default value "1"
+const selectedProjectId = localStorage.getItem('selectedProjectId') || "{{ current_project_id }}";
+// Set the selected project on the select element
+projectSelect.value = selectedProjectId;
+
+// Add an event listener to the select element to update the selected project ID in localStorage
+projectSelect.addEventListener("change", (event) => {
+  const projectId = event.target.value;
+  localStorage.setItem("selectedProjectId", projectId);
+  fetch(`/set_project/${projectId}`);
+  location.reload(); // Refresh the page
+});
+
+// Save state to localStorage when user leaves the page
+window.addEventListener('beforeunload', function(event) {
+  localStorage.setItem('myState', JSON.stringify(state));
+});
+
+// Retrieve state from localStorage when user comes back to the page
+var state = JSON.parse(localStorage.getItem('myState'));
+
+$(function() {
+  $("#notes").sortable({
+    update: function() {
+      let note_order = [];
+      $("#notes li").each(function() {
+        note_order.push($(this).data("note-id"));
+      });
+
+      $.post("{{ url_for('update_notes_order') }}", {
+        note_order: note_order
+      }).done(function() {
+        console.log("Order saved");
+      }).fail(function() {
+        alert("Failed to save order");
+      });
+    }
+  });
+});
+
+const dropdown = document.getElementById("project-select");
+  dropdown.addEventListener("change", function() {
+    const projectId = dropdown.value;
+    window.location.href = "/dashboard?id=" + projectId;
+  });
+
+
+
+
+</script>
+  </body>
+</html>

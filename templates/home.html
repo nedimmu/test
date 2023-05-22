@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home</title>
+  </head>
+  <body>
+    <h1>Willkommen</h1>
+    {% if user %}
+    <p>Sie sind angemeldet als {{ user.email }}.</p>
+    <a href="{{ url_for('logout') }}">Ausloggen</a>
+    <a href="{{ url_for('member') }}">member</a>
+    {% else %}
+    <p>Sie sind nicht angemeldet.</p>
+    <a href="{{ url_for('login') }}">Anmelden</a>
+    <a href="{{ url_for('register') }}">Registrieren</a>
+    {% endif %}
+  </body>
+</html>
