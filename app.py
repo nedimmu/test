@@ -162,6 +162,8 @@ def google_error(blueprint, error, error_description=None, error_uri=None):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
+
 @socketio.on('add_note')
 def handle_add_note(data):
     print('received data:', data)
